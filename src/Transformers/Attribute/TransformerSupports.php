@@ -17,11 +17,4 @@ class TransformerSupports
     {
     }
 
-    /**
-     * @return string
-     */
-    public function getSupports(): string
-    {
-        return $this->supports;
-    }
 }
