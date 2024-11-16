@@ -9,8 +9,6 @@ use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
 class TransformerFactory
 {
-    private ?TransformerInterface $transformer;
-
     private iterable $transformers;
 
     /**
@@ -29,27 +27,36 @@ class TransformerFactory
      */
     public function getTransformer(object $entity): TransformerInterface
     {
+        $entityClass = $entity::class;
+
         foreach ($this->transformers as $transformer) {
-            if(
-                !$transformer instanceof EntityTransformer
-                && $this->transformerSupports($transformer, $entity::class)
-            ) {
-                    return $transformer;
+
+            if (!$transformer instanceof TransformerInterface) {
+                continue;
+            }
+
+            if ($this->transformerSupports($transformer, $entityClass)) {
+                return $transformer;
             }
         }
 
         return new EntityTransformer();
     }
 
-    private function transformerSupports(TransformerInterface $transformer, string $fqcn)
+    private function transformerSupports(TransformerInterface $transformer, string $entityClass)
     {
-        $class = new \ReflectionClass($transformer);
-        $attributes = $class->getAttributes();
-        foreach ($attributes as $attribute) {
-            if($attribute->getName() === TransformerSupports::class && $attribute->getArguments()['supports'] === $fqcn) {
+        $reflectionClass = new \ReflectionClass($transformer);
+
+        foreach ($reflectionClass->getAttributes(TransformerSupports::class) as $attribute) {
+
+            /** @var TransformerSupports $instance */
+            $instance = $attribute->newInstance();
+
+            if ($instance->supports === $entityClass) {
                 return true;
             }
         }
+
         return false;
     }
 }

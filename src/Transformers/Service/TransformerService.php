@@ -23,7 +23,7 @@ final class TransformerService
      */
     public function __call(string $method, array $arguments): mixed
     {
-        if (count($arguments) === 0 || is_object(!$arguments[0])) {
+        if (count($arguments) === 0 || !is_object($arguments[0])) {
             throw new \InvalidArgumentException('The first argument must be an object.');
         }
 

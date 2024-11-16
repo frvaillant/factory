@@ -13,7 +13,7 @@ class TransformerSupports
      *
      * FQCN of supported type
      */
-    public function __construct(private string $supports)
+    public function __construct(public string $supports)
     {
     }
 
