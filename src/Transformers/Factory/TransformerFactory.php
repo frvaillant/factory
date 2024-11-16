@@ -5,7 +5,6 @@ namespace App\Transformers\Factory;
 use App\Transformers\Attribute\TransformerSupports;
 use App\Transformers\EntityTransformer;
 use App\Transformers\Interface\TransformerInterface;
-use Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
 class TransformerFactory
